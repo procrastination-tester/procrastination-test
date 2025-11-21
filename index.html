@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拖延症自我测试 - 50题专业评估</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            font-size: 32px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .progress-container {
+            margin-bottom: 25px;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4ecdc4, #44a08d);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .question-container {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        
+        .question-container:hover {
+            background: #e9ecef;
+        }
+        
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option.selected {
+            border-color: #4ecdc4;
+            background: #e8f8f7;
+            color: #2a7d7c;
+            font-weight: 600;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-prev {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-next {
+            background: #4ecdc4;
+            color: white;
+        }
+        
+        .btn-submit {
+            background: #ff6b6b;
+            color: white;
+            width: 100%;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:active {
+            transform: translateY(-1px);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .result-container {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .result-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+        
+        .result-score {
+            font-size: 72px;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-level {
+            font-size: 26px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+        
+        .level-1 {
+            background: #e8f8f7;
+            color: #2a7d7c;
+        }
+        
+        .level-2 {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .level-3 {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .level-4 {
+            background: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .result-description {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .share-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .share-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+        
+        .restart-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .question {
+                font-size: 16px;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .result-score {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>拖延症自我测试</h1>
+            <p class="subtitle">50题专业评估 · 了解你的拖延程度 · 点击选项立即测试</p>
+        </header>
+        
+        <div class="card">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="progress-text">
+                    <span>进度: <span id="current-page">1</span>/10</span>
+                    <span>已完成: <span id="progress-percent">0</span>%</span>
+                </div>
+            </div>
+            
+            <div id="test-container">
+                <!-- 问题将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="navigation">
+                <button class="btn-prev" id="prev-btn" disabled>上一页</button>
+                <button class="btn-next" id="next-btn">下一页</button>
+            </div>
+            
+            <button class="btn-submit" id="submit-btn" style="display: none;">查看测试结果</button>
+        </div>
+        
+        <div class="card result-container" id="result-container">
+            <h2 class="result-title">测试结果分析</h2>
+            <div class="result-score" id="result-score">0</div>
+            <div class="result-level" id="result-level">战拖大师</div>
+            <div class="result-description" id="result-description">
+                <!-- 结果描述将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="share-section">
+                <p>分享测试结果，帮助更多人了解自己</p>
+                <button class="share-btn" id="share-wechat">分享到微信</button>
+                <button class="share-btn" id="share-weibo">分享到微博</button>
+                <br>
+                <button class="restart-btn" id="restart-btn">重新测试</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>本测试仅供参考，如需专业帮助请咨询心理专家</p>
+        </div>
+    </div>
+
+    <script>
+        // 测试数据 - 50道题目
+        const questions = [
+            "我经常在任务截止日期的前一刻才开始行动。",
+            "我会为了'做好准备'而花费大量时间，却迟迟不开始核心任务。",
+            "我总觉得'还有时间'，不急着开始。",
+            "我开始工作前，总会先刷一会儿手机/社交软件。",
+            "我经常因为拖延而不得不熬夜赶工。",
+            "我把任务授权给别人，是因为我不想做，而不是因为别人更合适。",
+            "我经常因为拖延而错过一些机会（如优惠、活动报名等）。",
+            "我会列任务清单，但很少去执行它。",
+            "我常常因为一个项目太难或太枯燥而选择逃避。",
+            "我习惯同时处理多个任务，但最后哪个都没完成。",
+            "我做决定时经常犹豫不决，能拖就拖。",
+            "我需要感受到压力才能高效工作。",
+            "我经常对自己说：'等到周一/下个月/明年一开始，我就...'",
+            "我害怕自己无法完美地完成任务，所以宁愿不做。",
+            "我经常在开始工作后，因为一点小事就分心。",
+            "我低估了完成任务所需的时间。",
+            "我高估了自己在短时间内的工作效率。",
+            "我把不想做的任务形容为'无聊'或'没意义'。",
+            "我经常因为拖延而对家人、朋友或同事感到愧疚。",
+            "我会用一些不重要但紧急的小事来填充时间，逃避重要的任务。",
+            "我的办公桌或工作环境总是很乱，这让我更难开始工作。",
+            "我经常后悔：'如果我早点开始就好了。'",
+            "别人催促我时，我会感到烦躁和压力。",
+            "我认为自己就是一个'拖延的人'。",
+            "休息和娱乐时，我总想着还没完成的任务，无法尽兴。",
+            "我经常重新规划我的日程，为拖延创造空间。",
+            "我开始一项任务时，感觉阻力非常大，非常痛苦。",
+            "我经常在网上搜索'如何克服拖延症'。",
+            "我通过拖延来对抗我不喜欢的规定或权威。",
+            "我习惯把事情往最坏了想，从而失去行动的动力。",
+            "我承诺别人的事情，经常要拖到最后一刻才做。",
+            "我经常因为拖延而不得不取消或推迟其他计划。",
+            "我需要绝对安静、无人打扰的环境才能开始工作。",
+            "我经常对自己说：'我现在没心情做这个。'",
+            "我会因为一点点身体不适，就给自己理由不去工作。",
+            "我把重要的文件或信息随手一放，等到需要时却找不到。",
+            "回复邮件和信息对我来说是一件很有压力的事。",
+            "我经常在深夜精力充沛，但白天却无精打采。",
+            "我很难确定任务的优先级，不知道该先做哪个。",
+            "我经常在开始前，花过多时间寻找'最佳方法'。",
+            "我对自己完成任务的能力缺乏信心。",
+            "没有外部截止日期的任务，我几乎永远不会开始。",
+            "我经常把'忙'挂在嘴边，但实际上并没做多少事。",
+            "我沉迷于规划，但执行乏力。",
+            "我会因为前期的一点小挫折，就放弃整个任务。",
+            "我经常把手机设置成'勿扰模式'，但没过多久又拿起来看。",
+            "我认为拖延是我无法改变的个性的一部分。",
+            "我经常在完成任务后，觉得'其实也没那么难'。",
+            "我的睡眠或饮食因为拖延带来的压力而变得不规律。",
+            "做完这个测试，我打算'过一会儿'再去看结果。"
+        ];
+
+        // 选项数据
+        const options = [
+            { text: "非常符合", value: 5 },
+            { text: "符合", value: 4 },
+            { text: "一般", value: 3 },
+            { text: "不符合", value: 2 },
+            { text: "完全不符", value: 1 }
+        ];
+
+        // 结果评估数据
+        const results = [
+            {
+                level: "战拖大师",
+                levelClass: "level-1",
+                minScore: 50,
+                maxScore: 100,
+                description: "你是一个行动力超强的人！自律对你来说不是难事，你善于规划并高效执行。Deadline是你的朋友，而不是噩梦。继续保持！你可以成为身边人的榜样，分享你的时间管理心得。"
+            },
+            {
+                level: "积极行动派",
+                levelClass: "level-2",
+                minScore: 101,
+                maxScore: 150,
+                description: "你有轻微的拖延倾向，但总体上能较好地管理任务。偶尔会在不感兴趣或难度大的事情上犯懒，但最终能完成任务。建议注意那些你习惯性推迟的任务，找到原因并克服它。可以尝试番茄工作法来提升专注力。"
+            },
+            {
+                level: "拖延症候群",
+                levelClass: "level-3",
+                minScore: 151,
+                maxScore: 200,
+                description: "拖延已经明显影响到你的工作和生活了。你经常在焦虑和赶工中徘徊，虽然最终能完成任务，但过程非常痛苦，质量也可能打折扣。是时候采取行动了！从'2分钟法则'（如果一件事2分钟内能做完，就立刻做）开始，并学习任务分解技巧。"
+            },
+            {
+                level: "重度拖延患者",
+                levelClass: "level-4",
+                minScore: 201,
+                maxScore: 250,
+                description: "拖延是你的主要生活方式。你经常感到压力山大、自责，但就是无法开始行动。你可能已经因此错过了不少机会，并影响了自我评价。需要系统性地改变。强烈建议寻求专业书籍（如《拖延心理学》）或朋友的帮助。从小目标开始，每完成一步就给自己奖励，重建'我能做到'的信心。"
+            }
+        ];
+
+        // 全局变量
+        let currentPage = 0;
+        const questionsPerPage = 5;
+        const totalPages = Math.ceil(questions.length / questionsPerPage);
+        const userAnswers = new Array(questions.length).fill(0);
+
+        // DOM元素
+        const testContainer = document.getElementById('test-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const progressBar = document.getElementById('progress');
+        const currentPageEl = document.getElementById('current-page');
+        const progressPercentEl = document.getElementById('progress-percent');
+        const resultContainer = document.getElementById('result-container');
+        const resultScoreEl = document.getElementById('result-score');
+        const resultLevelEl = document.getElementById('result-level');
+        const resultDescriptionEl = document.getElementById('result-description');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // 初始化测试
+        function initTest() {
+            renderPage(0);
+            updateProgress();
+            
+            // 添加事件监听器
+            prevBtn.addEventListener('click', goToPrevPage);
+            nextBtn.addEventListener('click', goToNextPage);
+            submitBtn.addEventListener('click', showResult);
+            restartBtn.addEventListener('click', restartTest);
+            
+            // 分享按钮事件监听器
+            document.getElementById('share-wechat').addEventListener('click', shareToWechat);
+            document.getElementById('share-weibo').addEventListener('click', shareToWeibo);
+        }
+
+        // 渲染当前页的问题
+        function renderPage(pageIndex) {
+            currentPage = pageIndex;
+            testContainer.innerHTML = '';
+            
+            const startIndex = pageIndex * questionsPerPage;
+            const endIndex = Math.min(startIndex + questionsPerPage, questions.length);
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const questionEl = document.createElement('div');
+                questionEl.className = 'question-container';
+                
+                const questionText = document.createElement('div');
+                questionText.className = 'question';
+                questionText.textContent = `${i + 1}. ${questions[i]}`;
+                questionEl.appendChild(questionText);
+                
+                const optionsEl = document.createElement('div');
+                optionsEl.className = 'options';
+                
+                options.forEach((option, optionIndex) => {
+                    const optionEl = document.createElement('div');
+                    optionEl.className = 'option';
+                    if (userAnswers[i] === option.value) {
+                        optionEl.classList.add('selected');
+                    }
+                    
+                    optionEl.textContent = option.text;
+                    optionEl.dataset.value = option.value;
+                    optionEl.dataset.questionIndex = i;
+                    
+                    optionEl.addEventListener('click', () => {
+                        // 移除同一问题其他选项的选中状态
+                        const allOptions = optionsEl.querySelectorAll('.option');
+                        allOptions.forEach(el => {
+                            el.classList.remove('selected');
+                        });
+                        
+                        // 添加当前选项的选中状态
+                        optionEl.classList.add('selected');
+                        
+                        // 保存答案
+                        const questionIndex = parseInt(optionEl.dataset.questionIndex);
+                        userAnswers[questionIndex] = parseInt(optionEl.dataset.value);
+                        
+                        // 更新进度
+                        updateProgress();
+                    });
+                    
+                    optionsEl.appendChild(optionEl);
+                });
+                
+                questionEl.appendChild(optionsEl);
+                testContainer.appendChild(questionEl);
+            }
+            
+            // 更新按钮状态
+            updateButtons();
+        }
+
+        // 更新按钮状态
+        function updateButtons() {
+            prevBtn.disabled = currentPage === 0;
+            
+            if (currentPage === totalPages - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const answeredCount = userAnswers.filter(answer => answer > 0).length;
+            const progressPercent = Math.round((answeredCount / questions.length) * 100);
+            
+            progressBar.style.width = `${progressPercent}%`;
+            progressPercentEl.textContent = progressPercent;
+            currentPageEl.textContent = currentPage + 1;
+        }
+
+        // 上一页
+        function goToPrevPage() {
+            if (currentPage > 0) {
+                renderPage(currentPage - 1);
+            }
+        }
+
+        // 下一页
+        function goToNextPage() {
+            if (currentPage < totalPages - 1) {
+                renderPage(currentPage + 1);
+            }
+        }
+
+        // 显示结果
+        function showResult() {
+            // 计算总分
+            const totalScore = userAnswers.reduce((sum, answer) => sum + answer, 0);
+            
+            // 确定结果等级
+            let result = results[0];
+            for (let i = 0; i < results.length; i++) {
+                if (totalScore >= results[i].minScore && totalScore <= results[i].maxScore) {
+                    result = results[i];
+                    break;
+                }
+            }
+            
+            // 显示结果
+            resultScoreEl.textContent = totalScore;
+            resultLevelEl.textContent = result.level;
+            resultLevelEl.className = `result-level ${result.levelClass}`;
+            resultDescriptionEl.textContent = result.description;
+            
+            // 隐藏测试，显示结果
+            document.querySelector('.card:first-child').style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+
+        // 重新开始测试
+        function restartTest() {
+            // 重置答案
+            userAnswers.fill(0);
+            
+            // 重置页面
+            currentPage = 0;
+            renderPage(0);
+            updateProgress();
+            
+            // 显示测试，隐藏结果
+            document.querySelector('.card:first-child').style.display = 'block';
+            resultContainer.style.display = 'none';
+        }
+
+        // 分享到微信
+        function shareToWechat() {
+            alert("请使用微信扫描二维码分享此测试");
+            // 实际应用中这里应该生成二维码
+        }
+
+        // 分享到微博
+        function shareToWeibo() {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent("我的拖延症测试结果：" + resultLevelEl.textContent);
+            window.open(`http://service.weibo.com/share/share.php?url=${url}&title=${title}`, '_blank');
+        }
+
+        // 初始化测试
+        window.onload = initTest;
+    </script>
+</body>
+</html>
